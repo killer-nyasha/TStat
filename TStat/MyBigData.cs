@@ -98,12 +98,22 @@ namespace TStat
 
         public void AddChat(Chat item)
         {
-            Chat chat = td.chats.list.Find(x => x.id == item.id);
-
-            if (chat == null)
-                td.chats.list.Add(chat);
+            if (td == null)
+            {
+                td = new TData();
+                td.chats = new TChats();
+                td.chats.list = new List<Chat>();
+                td.chats.list.Add(item);
+            }
             else
-                ApplyChatDiff(chat, item);
+            {
+                Chat chat = td.chats.list.Find(x => x.id == item.id);
+
+                if (chat == null)
+                    td.chats.list.Add(item);
+                else
+                    ApplyChatDiff(chat, item);
+            }
         }
 
         public void ApplyChatDiff(Chat oldChat, Chat newChat)
@@ -174,14 +184,14 @@ namespace TStat
         {
             this.config = config;
 
-            try
+            //try
             {
                 DeepSearch(new DirectoryInfo(String.IsNullOrEmpty(config.SearchDir) ? ".\\" : config.SearchDir));
             }
-            catch (Exception ex)
+            //catch (Exception ex)
             {
-                MessageBox.Show("Не удалось открыть папку с данными!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                throw ex;
+            //    MessageBox.Show("Не удалось открыть папку с данными!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            //    throw ex;
             }
 
             if (td == null)
