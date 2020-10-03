@@ -291,8 +291,8 @@ namespace TStat
             this.endDate = endDate;
             this.daysInOnePoint = daysInOnePoint;
 
-            Regex dialogRegex = new Regex(dialogRegexS);
-            Regex wordRegex = new Regex(wordRegexS);
+            Regex dialogRegex = new Regex(dialogRegexS, RegexOptions.IgnoreCase);
+            Regex wordRegex = new Regex(wordRegexS, RegexOptions.IgnoreCase);
 
             DateTime actualStartDate = DateTime.Now;
 

@@ -124,8 +124,6 @@ namespace TStat
                         MessageBox.Show($"Опция \"{mode.Text}\" не распознана", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning); return;
                 }
 
-                //dialog.Text = dialog.Text.ToLower();
-                //word.Text = word.Text.ToLower();
                 DrawData(null, myBigData.RunWordsCounter(dialog.Text, 1000, onlyMy, word.Text, statMode, startDate.DisplayDate, endDate.DisplayDate, d));
 
 
