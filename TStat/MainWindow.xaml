@@ -10,31 +10,31 @@
     <Grid>
         <DockPanel x:Name="dock">
                 <StackPanel DockPanel.Dock="Top">
-                <TextBox x:Name="dialog" BorderThickness="2" BorderBrush="AliceBlue" FontSize="16"></TextBox>
-                <TextBox x:Name="word" BorderThickness="2" BorderBrush="AliceBlue" FontSize="16"></TextBox>
+                <TextBox x:Name="dialog" BorderThickness="2" BorderBrush="AliceBlue" FontSize="16" ToolTip="Выбрать собеседников, в чьих именах содержится данный текст"></TextBox>
+                <TextBox x:Name="word" BorderThickness="2" BorderBrush="AliceBlue" FontSize="16" ToolTip="Выбрать слова, в которых содержится данный текст"></TextBox>
                 <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <TextBox x:Name="nameText" Text="Введите имя"></TextBox>
-                    <Label x:Name="idLabel" Content="id: 0"></Label>
-                    <Button Content="Обновить имя" Click="UpdateNameClick"></Button>
+                        <TextBox x:Name="nameText" Text="Введите имя" ToolTip="Введите часть вашего имени и нажмите &quot;Обновить имя&quot;"></TextBox>
+                        <Label x:Name="idLabel" Content="id: 0" ToolTip="Ваш id. Используется, когда требуется отделить ваши сообщения от чужих."></Label>
+                        <Button Content="Обновить имя" Click="UpdateNameClick" ToolTip="Найти и установить ваш id по имени"></Button>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <ComboBox x:Name="my">
-                        <ComboBoxItem Content="все сообщения" IsSelected="True"></ComboBoxItem>
-                        <ComboBoxItem Content="мои сообщения"></ComboBoxItem>
-                        <ComboBoxItem Content="чужие сообщения"></ComboBoxItem>
-                        <ComboBoxItem Content="все (раздельно)"></ComboBoxItem>
+                    <ComboBox x:Name="my" ToolTip="Выбрать ваши сообщения или чужие. Подробнее - см. подсказки для каждого пункта">
+                        <ComboBoxItem Content="все сообщения" IsSelected="True" ToolTip="Ваши и чужие сообщения показываются вместе, одной линией графика"></ComboBoxItem>
+                        <ComboBoxItem Content="мои сообщения" ToolTip="Показываются только ваши сообщения"></ComboBoxItem>
+                        <ComboBoxItem Content="чужие сообщения" ToolTip="Показываются только чужие сообщения"></ComboBoxItem>
+                        <ComboBoxItem Content="все (раздельно)" ToolTip="Ваши и чужие сообщения показываются раздельно, на двух линиях графика"></ComboBoxItem>
                     </ComboBox>
-                    <ComboBox x:Name="mode">
-                        <ComboBoxItem Content="разделять всё" IsSelected="True"></ComboBoxItem>
-                        <ComboBoxItem Content="не разделять по диалогам"></ComboBoxItem>
-                        <ComboBoxItem Content="не разделять по словам"></ComboBoxItem>
+                        <ComboBox x:Name="mode" ToolTip="Режим работы. Подробнее - см. подсказки для каждого пункта">
+                        <ComboBoxItem Content="разделять всё" IsSelected="True" ToolTip="Каждое слово в каждом диалоге показывается на отдельной линии"></ComboBoxItem>
+                        <ComboBoxItem Content="не разделять по диалогам" ToolTip="Для каждого слова показывается на отдельной линии его употребление во всех диалогах в сумме"></ComboBoxItem>
+                        <ComboBoxItem Content="не разделять по словам" ToolTip="Для каждого диалога показывается на отдельной линии употребление всех слов в сумме"></ComboBoxItem>
                     </ComboBox>
-                    <DatePicker x:Name="startDate"></DatePicker>
-                    <DatePicker x:Name="endDate"></DatePicker>
-                    <TextBox x:Name="days" Text="7"></TextBox>
+                        <DatePicker x:Name="startDate" ToolTip="Дата, с которой начинать сбор статистики"></DatePicker>
+                        <DatePicker x:Name="endDate"  ToolTip="Дата, на которой закончить сбор статистики"></DatePicker>
+                        <TextBox x:Name="days" Text="7" ToolTip="Статистика за сколько дней будет одной точкой графика. 1 - по дням, 7 - по неделям, и т. д."></TextBox>
 
-                    <Button Content="Обновить" Click="RunClick"></Button>
+                        <Button Content="Обновить" Click="RunClick" ToolTip="Построить график"></Button>
                 </StackPanel>
                 </Grid>
             </StackPanel>
