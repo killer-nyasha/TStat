@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 
 using LiveCharts;
 using LiveCharts.Wpf;
-using LiveCharts.Geared;
+//using LiveCharts.Geared;
 
 using System.Linq;
 
@@ -60,8 +60,8 @@ namespace TStat
                 lineSeries.Title = lineSeries.Name;
                 //lineSeries.Values = new ChartValues<int>(item.Value);
 
-                var cv = item.Value.AsGearedValues();
-                lineSeries.Values = cv;
+                //var cv = item.Value.AsGearedValues();
+                lineSeries.Values = new ChartValues<int>(item.Value);
                     //lineSeries.Values = lineSeries.Values.AsGearedValues().WithQuality(Quality.High);
 
                 lineSeries.PointGeometry = null;
@@ -131,8 +131,8 @@ namespace TStat
                     lineSeries.Title = lineSeries.Name;
                     //lineSeries.Values = new ChartValues<int>(item.Value);
 
-                    var cv = data[item].AsGearedValues();
-                    lineSeries.Values = cv;
+                    //var cv = data[item].AsGearedValues();
+                    lineSeries.Values = new ChartValues<int>(data[item]);
                     //lineSeries.Values = lineSeries.Values.AsGearedValues().WithQuality(Quality.High);
 
                     lineSeries.PointGeometry = null;
