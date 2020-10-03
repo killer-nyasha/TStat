@@ -209,7 +209,7 @@ namespace TStat
         {
             FileInfo[] files = di.GetFiles();
             for (int i = 0; i < files.Length; i++)
-                if (files[i].Name.EndsWith(".json") && files[i].Name != "config.json")
+                if (files[i].Name.EndsWith(".tg.json") /*&& files[i].Name != "config.json"*/)
                     OpenChat(files[i].FullName);
 
             DirectoryInfo[] directories = di.GetDirectories();
