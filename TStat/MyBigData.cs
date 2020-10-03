@@ -232,7 +232,17 @@ namespace TStat
                     sb.Append(s[i]);
                     space = false;
                 }
-                else
+            else if ((s[i] >= 'A' && s[i] <= 'Z'))
+                {
+                    sb.Append((char)(s[i] - 'A' + 'a'));
+                    space = false;
+                }
+            else if ((s[i] >= 'a' && s[i] <= 'z'))
+                {
+                    sb.Append(s[i]);
+                    space = false;
+                }
+            else
                 {
                     if (!space)
                         sb.Append(spaceChar);
@@ -288,14 +298,14 @@ namespace TStat
 
             foreach (var chat in td.chats.list)
             {
-                //if (chat.name == null)
-                //    continue;
+                if (chat.name == null)
+                    continue;
 
-                //if (!dialogRegex.IsMatch(chat.name))
-                //    continue;
+                if (!dialogRegex.IsMatch(chat.name))
+                    continue;
 
-                //if (chat.messages.Count < minMessages)
-                //    continue;
+                if (chat.messages.Count < minMessages)
+                    continue;
 
                 if (chat.messages.Count > 0 && chat.messages[0].date < actualStartDate)
                     actualStartDate = chat.messages[0].date;
