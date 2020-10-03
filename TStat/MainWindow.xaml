@@ -1,0 +1,56 @@
+﻿<Window x:Class="TStat.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TStat"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <DockPanel x:Name="dock">
+                <StackPanel DockPanel.Dock="Top">
+                <TextBox x:Name="dialog" BorderThickness="2" BorderBrush="AliceBlue" FontSize="16"></TextBox>
+                <TextBox x:Name="word" BorderThickness="2" BorderBrush="AliceBlue" FontSize="16"></TextBox>
+                <Grid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBox x:Name="nameText" Text="Введите имя"></TextBox>
+                    <Label x:Name="idLabel" Content="id: 0"></Label>
+                    <Button Content="Обновить имя" Click="UpdateNameClick"></Button>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <ComboBox x:Name="my">
+                        <ComboBoxItem Content="все сообщения" IsSelected="True"></ComboBoxItem>
+                        <ComboBoxItem Content="мои сообщения"></ComboBoxItem>
+                        <ComboBoxItem Content="чужие сообщения"></ComboBoxItem>
+                        <ComboBoxItem Content="все (раздельно)"></ComboBoxItem>
+                    </ComboBox>
+                    <ComboBox x:Name="mode">
+                        <ComboBoxItem Content="разделять всё" IsSelected="True"></ComboBoxItem>
+                        <ComboBoxItem Content="не разделять по диалогам"></ComboBoxItem>
+                        <ComboBoxItem Content="не разделять по словам"></ComboBoxItem>
+                    </ComboBox>
+                    <DatePicker x:Name="startDate"></DatePicker>
+                    <DatePicker x:Name="endDate"></DatePicker>
+                    <TextBox x:Name="days" Text="7"></TextBox>
+
+                    <Button Content="Обновить" Click="RunClick"></Button>
+                </StackPanel>
+                </Grid>
+            </StackPanel>
+            <lvc:CartesianChart Name="series">
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis x:Name="axisX" FontSize="16" Foreground="Black"></lvc:Axis>
+                </lvc:CartesianChart.AxisX>
+
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis x:Name="axisY" FontSize="14" Foreground="Black"></lvc:Axis>
+                </lvc:CartesianChart.AxisY>
+            </lvc:CartesianChart>
+            
+        </DockPanel>
+
+
+
+    </Grid>
+</Window>
