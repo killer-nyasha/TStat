@@ -67,14 +67,61 @@ namespace TStat
     {
         public bool configChanged;
 
+        public const string Config_Version = "1.1";
+
+        public string Version { get; set; }
+
         public long MyId { get => myId; set { myId = value; configChanged = true; } }
         long myId;
 
         public string SearchDir { get; set; } = ".//";
 
-        //public DateTime Start { get; set; } = new DateTime(2017, 7, 1);
+        public int GraphLimit { get; set; } = 40;
+        public int TableLimit { get; set; } = 5000;
+    }
 
-        //public int DaysInOnePoint { get; set; } = 7;
+    public struct StatKey
+    {
+        public string Key;
+
+        public StatKey(string my, string name, string word, int count)
+        {
+            Key = null;
+            My = my/* == "my"*/;
+            Name = name;
+            Word = word;
+            Count = count;
+        }
+
+        public void Init()
+        {
+            Key = My + Name + Word;
+        }
+
+        public override int GetHashCode()
+        {
+            return Key.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is StatKey st && Key == st.Key;
+        }
+
+        public static bool operator==(StatKey st1, StatKey st2)
+        {
+            return st1.Key == st2.Key;
+        }
+
+        public static bool operator!=(StatKey st1, StatKey st2)
+        {
+            return st1.Key != st2.Key;
+        }
+
+        public string My { get; set; }
+        public string Name { get; set; }
+        public string Word { get; set; }
+        public int Count { get; set; }
     }
 
     public class MyBigData
@@ -285,7 +332,7 @@ namespace TStat
             return null;
         }
 
-        public Dictionary<string, int[]> RunWordsCounter(string dialogRegexS, int minMessages, OnlyMy my, string wordRegexS, StatMode mode, DateTime startDate, DateTime endDate, int daysInOnePoint, int dictionaryLimit = 50)
+        public Dictionary<StatKey, int[]> RunWordsCounter(string dialogRegexS, int minMessages, OnlyMy my, string wordRegexS, StatMode mode, DateTime startDate, DateTime endDate, int daysInOnePoint/*, int dictionaryLimit = 50*/)
         {
             this.startDate = startDate;
             this.endDate = endDate;
@@ -317,9 +364,7 @@ namespace TStat
 
             int sz = GetIndexFromDate(this.endDate) + 1;
 
-
-
-            Dictionary<string, int[]> words = new Dictionary<string, int[]>();
+            Dictionary<StatKey, int[]> words = new Dictionary<StatKey, int[]>();
 
             foreach (var chat in td.chats.list)
             {
@@ -342,38 +387,47 @@ namespace TStat
                         || my == OnlyMy.NotMy && message.from_id != config.MyId
                         )
                     {
+                        if (message.date > endDate.AddDays(1))
+                            break;
+
                         var str = message.GetText();
                         if (str != null)
                         {
                             var w = OnlyLetters(str).Split();
                             for (int i = 0; i < w.Length; i++)
                             {
+                                if (String.IsNullOrEmpty(w[i]))
+                                    continue;
+
                                 if (!wordRegex.IsMatch(w[i]))
                                     continue;
 
-                                string key = null;
+                                StatKey key = new StatKey();
                                 switch (mode)
                                 {
                                     case StatMode.SplitAll:
                                         {
-                                            key = chatPrefix + w[i];
+                                            key.Name = chatPrefix;
+                                            key.Word = w[i];
                                             break;
                                         }
                                     case StatMode.SumWords:
                                         {
-                                            key = chat.name;
+                                            key.Name = chatPrefix;
                                             break;
                                         }
                                     case StatMode.SumPeople:
                                         {
-                                            key = w[i];
+                                            key.Word = w[i];
                                             break;
                                         }
                                 }
                                 if (my == OnlyMy.AnySplit)
-                                    key = (message.from_id == config.MyId ? "my_" : "not_my_") + key;
+                                    key.My = (message.from_id == config.MyId ? "my_" : "not_my_");
 
-                                if (words.Count < dictionaryLimit)
+                                key.Init();
+
+                                //if (words.Count < dictionaryLimit)
                                 {
                                     int index = GetIndexFromDate(message.date);
                                     if (index < 0 || index >= sz)
@@ -390,9 +444,6 @@ namespace TStat
                         }
                     }
             }
-
-            if (words.Count == dictionaryLimit)
-                MessageBox.Show("Слишком много совпадений. Не все совпадения помещены на график.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
 
             return words;
         }

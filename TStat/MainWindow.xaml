@@ -13,12 +13,7 @@
                 <TextBox x:Name="dialog" BorderThickness="2" BorderBrush="AliceBlue" FontSize="16" ToolTip="Выбрать собеседников, в чьих именах содержится данный текст"></TextBox>
                 <TextBox x:Name="word" BorderThickness="2" BorderBrush="AliceBlue" FontSize="16" ToolTip="Выбрать слова, в которых содержится данный текст"></TextBox>
                 <Grid>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBox x:Name="nameText" Text="Введите имя" ToolTip="Введите часть вашего имени и нажмите &quot;Обновить имя&quot;"></TextBox>
-                        <Label x:Name="idLabel" Content="id: 0" ToolTip="Ваш id. Используется, когда требуется отделить ваши сообщения от чужих."></Label>
-                        <Button Content="Обновить имя" Click="UpdateNameClick" ToolTip="Найти и установить ваш id по имени"></Button>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal">
                     <ComboBox x:Name="my" ToolTip="Выбрать ваши сообщения или чужие. Подробнее - см. подсказки для каждого пункта">
                         <ComboBoxItem Content="все сообщения" IsSelected="True" ToolTip="Ваши и чужие сообщения показываются вместе, одной линией графика"></ComboBoxItem>
                         <ComboBoxItem Content="мои сообщения" ToolTip="Показываются только ваши сообщения"></ComboBoxItem>
@@ -36,9 +31,21 @@
 
                         <Button Content="Обновить" Click="RunClick" ToolTip="Построить график"></Button>
                 </StackPanel>
-                </Grid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <TextBox x:Name="nameText" Text="Введите имя" ToolTip="Введите часть вашего имени и нажмите &quot;Обновить имя&quot;"></TextBox>
+                    <Label x:Name="idLabel" Content="id: 0" ToolTip="Ваш id. Используется, когда требуется отделить ваши сообщения от чужих."></Label>
+                    <Button Content="Обновить id" Click="UpdateNameClick" ToolTip="Найти и установить ваш id по имени"></Button>
+                    <Button Visibility="Collapsed" Content="Сброс" Click="ResetClick" ToolTip="Удалить файл конфигурации"></Button>
+                </StackPanel>
+            </Grid>
             </StackPanel>
-            <lvc:CartesianChart Name="series">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="5*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                        <lvc:CartesianChart Name="series" Grid.Column="1">
                 <lvc:CartesianChart.AxisX>
                     <lvc:Axis x:Name="axisX" FontSize="16" Foreground="Black"></lvc:Axis>
                 </lvc:CartesianChart.AxisX>
@@ -46,8 +53,16 @@
                 <lvc:CartesianChart.AxisY>
                     <lvc:Axis x:Name="axisY" FontSize="14" Foreground="Black"></lvc:Axis>
                 </lvc:CartesianChart.AxisY>
-            </lvc:CartesianChart>
-            
+
+                </lvc:CartesianChart>
+                <DataGrid x:Name="dataGrid" AutoGenerateColumns="True" Grid.Column="0"></DataGrid>
+                <!--<ListBox x:Name="allTimeStat" Grid.Column="0">
+                </ListBox>-->
+
+                <GridSplitter Height="343" VerticalAlignment="Top" Width="5"/>
+            </Grid>
+
+
         </DockPanel>
 
 

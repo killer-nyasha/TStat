@@ -67,6 +67,88 @@ namespace TStat
                 lineSeries.PointGeometry = null;
                 sc.Add(lineSeries);
             }
+
+            //allTimeStat.Items.Clear();
+
+            //List<object> objects = new List<object>();
+
+            dataGrid.Items.Clear();
+
+           // data.ToArray();
+
+            dataGrid.ItemsSource = data.ToArray();
+                
+                //new Stat { My="my", Name="Min", Word="hui", Count=15 });
+
+            //foreach (var item in data)
+            //    objects.Add($"{item.Key}: {item.Value.Sum()}");
+
+            //foreach (var item in objects)
+            //   allTimeStat.Items.Add(item);
+        }
+
+        List<StatKey> statTable = new List<StatKey>();
+
+        void DrawData(string filter, Dictionary<StatKey, int[]> data, int graphLimit, int tableLimit)
+        {
+            axisX.LabelFormatter = value => /*new System.DateTime((long)(value * TimeSpan.FromDays(1).Ticks)).ToString("t")*/ myBigData.GetDateFromIndex(value).ToString("d");
+
+            series.DisableAnimations = true;
+            sc.Clear();
+
+            if (data.Count > tableLimit)
+                MessageBox.Show("Слишком много совпадений. Не все совпадения помещены на график и в таблицу.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+            else if (data.Count > graphLimit)
+                MessageBox.Show("Слишком много совпадений. Не все совпадения помещены на график.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Information);
+
+
+            //allTimeStat.Items.Clear();
+
+            //List<object> objects = new List<object>();
+
+            //dataGrid.Items.Clear();
+
+            // data.ToArray();
+
+            statTable = data.Keys.ToList();
+            
+            for (int i = 0; i < statTable.Count; i++)
+            {
+                var st = statTable[i];
+                st.Count = data[st].Sum();
+                statTable[i] = st;
+            }
+
+            statTable = statTable.OrderByDescending(x => x.Count).Take(tableLimit).ToList();
+
+            var graphData = statTable.Take(graphLimit);
+
+            foreach (var item in graphData)
+                if (filter == null || item.Key.Contains(filter))
+                {
+                    LineSeries lineSeries = new LineSeries();
+                    lineSeries.Name = myBigData.OnlyLetters(item.Key, '_');
+                    lineSeries.Title = lineSeries.Name;
+                    //lineSeries.Values = new ChartValues<int>(item.Value);
+
+                    var cv = data[item].AsGearedValues();
+                    lineSeries.Values = cv;
+                    //lineSeries.Values = lineSeries.Values.AsGearedValues().WithQuality(Quality.High);
+
+                    lineSeries.PointGeometry = null;
+                    sc.Add(lineSeries);
+                }
+
+            dataGrid.ItemsSource = statTable;
+            //dataGrid.ItemsSource = data.ToArray();
+
+            //new Stat { My="my", Name="Min", Word="hui", Count=15 });
+
+            //foreach (var item in data)
+            //    objects.Add($"{item.Key}: {}");
+
+            //foreach (var item in objects)
+            //   allTimeStat.Items.Add(item);
         }
 
         public Func<double, string> Formatter { get; set; }
@@ -83,6 +165,22 @@ namespace TStat
             string myName = myBigData.FindMyId(nameText.Text);
             idLabel.Content = config.MyId;
             nameText.Text = myName;
+        }
+
+        public void ResetClick(object sender, EventArgs e)
+        {
+            FileInfo fi = new FileInfo("config.json");
+            if (fi.Exists)
+            fi.Delete();
+
+            //using (StreamWriter sw = new StreamWriter("config.json", false, Encoding.UTF8))
+            //{
+            //    string text = System.Text.Json.JsonSerializer.Serialize<Config>(config);
+            //    sw.Write(text);
+            //    //config = System.Text.Json.JsonSerializer.Deserialize<Config>(text);
+            //}
+            saveConfig = false;
+            Close();
         }
 
         public void RunClick(object sender, EventArgs e)
@@ -124,7 +222,7 @@ namespace TStat
                         MessageBox.Show($"Опция \"{mode.Text}\" не распознана", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning); return;
                 }
 
-                DrawData(null, myBigData.RunWordsCounter(dialog.Text, 1000, onlyMy, word.Text, statMode, startDate.DisplayDate, endDate.DisplayDate, d));
+                DrawData(null, myBigData.RunWordsCounter(dialog.Text, 1000, onlyMy, word.Text, statMode, startDate.DisplayDate, endDate.DisplayDate, d), config.GraphLimit, config.TableLimit);
 
 
 
@@ -173,10 +271,14 @@ namespace TStat
             }
         }
 
+        public bool saveConfig = true;
+
         public void SaveConfig()
         {
+            if (saveConfig && config.configChanged || (config.Version != Config.Config_Version))
             using (StreamWriter sw = new StreamWriter("config.json", false, Encoding.UTF8))
             {
+                config.Version = Config.Config_Version;
                 string text = System.Text.Json.JsonSerializer.Serialize<Config>(config);
                 sw.Write(text);
                 //config = System.Text.Json.JsonSerializer.Deserialize<Config>(text);
@@ -223,9 +325,12 @@ namespace TStat
             //axisY.DataContext = this;
             //sc.se
 
+            dataGrid.ItemsSource = statTable;
+            dataGrid.IsReadOnly = true;
+
             series.Series = sc;
 
-            Closing += (s, e) => { if (config.configChanged) SaveConfig(); };
+            Closing += (s, e) => { SaveConfig(); };
         }
     }
 }
