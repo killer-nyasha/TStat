@@ -17,7 +17,7 @@ namespace TStat
         public string type { get; set; }
         public DateTime date { get; set; }
         public string from { get; set; }
-        public int from_id { get; set; }
+        public long from_id { get; set; }
         public object text { get; set; }
 
         public string GetText()
